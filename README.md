@@ -4,7 +4,7 @@ Folder Structure
 ### The current project is structured as follows
 
     .
-    ├── java-client	        		    # API Java Client
+    ├── java-client	      		    # API Java Client
     ├── jaxrs-server                    # API JAX-RS Server
     └── spiga-parking-api-spec          # API Documentation
 
