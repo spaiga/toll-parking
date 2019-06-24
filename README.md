@@ -73,7 +73,7 @@ http://localhost:8080/api/swagger.json
 The API Documentation is available here:
 
 ```
-http://localhost:8080/toll-parking-api-spec/
+[http://localhost:8080/toll-parking-api-spec/](http://localhost:8080/toll-parking-api-spec/)
 ```
 
 ## Interacting with Toll Parking API
@@ -89,7 +89,7 @@ Several modes are available to interact with the server.
 The API Documentation is available here:
 
 ```
-http://localhost:8080/toll-parking-api-spec/
+[http://localhost:8080/toll-parking-api-spec/](http://localhost:8080/toll-parking-api-spec/)
 ```
 
 Clicking on each method, you will have the possibility to *Try Out* that method, directly from the web page.
