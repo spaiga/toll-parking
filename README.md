@@ -5,10 +5,10 @@ The document aims at describing the Toll Parking API create by `Fabio SPIGA`.
 Through Toll Parking API, an end user is able to search for the most convenient parking lot for its own vehicle, drive to it and park. 
 At the moment of leaving, the API allows to compute the amount to pay and bill the end user.
 
-Toll Parking RESTful API is based on `OpenAPI Specification` (OAS) and uses `Swagger UI` tool to generate and visualize API documentation 
+Toll Parking RESTful API is based on `OpenAPI Specification` (OAS) and uses `Swagger` tools to generate and visualize API documentation 
 so it can be easily understood and used.
 
-You can learn more about Swagger specifications from here: [http://swagger.io/specification/](http://swagger.io/specification/)
+You can learn more about *why* using OpenAPI/Swagger from here: [https://swagger.io/docs/specification/about/](https://swagger.io/docs/specification/about/)
 
 
 ## Getting Started
@@ -66,9 +66,7 @@ mvn clean package jetty:run
 
 You can then view the swagger listing here:
 
-```
-http://localhost:8080/api/swagger.json
-```
+[http://localhost:8080/api/swagger.json](http://localhost:8080/api/swagger.json)
 
 The API Documentation is available here:
 
@@ -87,7 +85,7 @@ Several modes are available to interact with the server.
 
 The [API Documentation](http://localhost:8080/toll-parking-api-spec/) allows also to interact with the API.
 
-Clicking on each method, you will have the possibility to *Try Out* that method, directly from the web page.
+Clicking on each method, you will have the possibility to *Try it out* that method, directly from the web page.
 
 
 ### Using CURL
