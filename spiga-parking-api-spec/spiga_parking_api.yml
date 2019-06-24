@@ -1,0 +1,573 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Toll Parking API
+  contact:
+    name: Fabio SPIGA
+    email: spiga.fabio@gmail.com
+  description: >
+    # API information
+
+    The document aims at describing the Toll Parking API create by `Fabio SPIGA`.
+
+
+    Through Toll Parking API, an end user is able to search for the most convenient parking lot for its own vehicle, drive to it and park. At the moment of leaving, the API allows to compute the amount to pay and bill the end user.
+
+
+    ## CRUD operations
+
+    All our URLs are
+    [RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer).
+
+    Every endpoint (URL) may support one of four different http verbs. GET
+    requests fetch information about an object, POST requests create objects, PUT requests update objects and DELETE requests will delete objects.
+
+
+    ## Main Resources
+
+    ### Parking
+
+    The central resource is the `Parking`: this resource represents an ongoing occupancy of a `Lot` by a `Car`. It is in charge of keeping the information regarding the time spent so allowing the computation of the `Bill`. 
+    
+    ### Lot
+
+    `Lot` represents a Parking Lot of any type, a  `lotStatus` says if it is available or busy. Thanks to its `coordinates`, a driver can easily find it and start a `Parking`. It might be provided with power supply for electric cars or not, as indicated by the property `carType`. A specific `PricingPolicy` is configured for each Lot, among the available policies provided by the API. 
+
+
+    ### PricingPolicy
+
+    A `PricingPolicy` specifies the logic to compute a `Bill` and the end of the parking. 
+    
+    It is a generic type, that allows multiple implementations.
+    
+    Currently there are two alternatives:
+      * `LinearPricingPolicy`, billing the customers for each hour spent in the parking;
+      * `FixedThenLinearPricingPolicy`, billing a fixed amount plus each hour spent in the parking.
+      
+    In the future, more policies will be available and can dinamically attached to any Lot.
+    
+
+    ### Bill
+
+    The `Bill` resource represents the ticket information provided a the end of the parking, indicating the time spent and the amount to pay.
+
+    ### Car
+
+    The `Car` resource represents any potential user of the Toll Parking.
+
+
+
+
+    ## Examples
+
+    ```
+
+    GET /lots
+
+    ```
+
+    will return all the parking Lots with their details.
+
+    ```
+
+    GET /lots?status=availablefacility=powerSupply20kw
+
+    ```
+
+    will return all the parking lots with status 'available' and providing for a 20kW power supply.
+    
+
+
+
+
+host: localhost:8080
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+- name: "parking"
+  description: "Access to the Parking functionalities "
+- name: "lot"
+  description: "Access to the Lot functionalities"
+- name: "pricingPolicy"
+  description: "Access to the Pricing Policy functionalities"
+
+ 
+paths: 
+  /lots: 
+    get: 
+      description: "Returns a list of Lots, optionally filtered by Status and CarType"
+      summary: "Returns a list of Lots, optionally filtered by Status and CarType"
+      operationId: "getLots"
+      tags: 
+        - parking
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "status"
+          in: "query"
+          description: "Availability of the Lot"
+          required: false
+          type: "string"
+          enum:
+            - available
+            - busy  
+          default: "available"
+        - 
+          name: "carType"
+          in: "query"
+          description: "Power Supply of the Car"
+          required: false
+          type: "string"
+          enum:
+            - gasoline
+            - electric20kw
+            - electric50kw        
+      responses: 
+        "200":
+          description: "successful response"
+          schema: 
+            type: "array"
+            items: 
+              $ref: "#/definitions/Lot"
+        "204":
+          description: "No Lots found!"              
+            
+    post: 
+      description: "Add a new Lot to the Tool Parking"
+      summary: "Add a new Lot to the Tool Parking"
+      operationId: "addLot"
+      tags: 
+        - lot
+      consumes:
+        - "application/json"
+        - "application/xml"      
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - 
+          in: "body"
+          name: "body"
+          description: "Lot that needs to be added to the toll parking"
+          required: true
+          schema:
+            $ref: "#/definitions/Lot"
+      responses: 
+        "200":
+          description: "successful response"
+          schema:
+            $ref: "#/definitions/Lot"
+            
+    put: 
+      description: "Update the Status of a Lot"
+      summary: "Update the Status of a Lot"
+      operationId: "updateLotStatus"
+      tags: 
+        - lot
+      consumes:
+        - "application/json"
+        - "application/xml"      
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters:
+        - 
+          in: "body"
+          name: "body"
+          description: "Lot that needs to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/Lot"
+      responses: 
+        "200":
+          description: "successful response"
+          schema:
+            $ref: "#/definitions/Lot"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Lot not found"
+        "405":
+          description: "Validation exception"          
+
+  /lots/{lotId}: 
+    get: 
+      description: "Returns a Lot by ID"
+      summary: "Returns a Lot by ID"
+      operationId: "getLotByID"
+      tags: 
+        - lot
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "lotId"
+          in: "path"
+          description: "ID of the lot to fetch"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses: 
+        "200":
+          description: "successful response"
+          schema: 
+            $ref: "#/definitions/Lot"
+        default: 
+          description: "unexpected error"
+          schema: 
+            $ref: "#/definitions/ErrorModel"
+
+      
+    delete: 
+      description: "Deletes a single lot based on the ID supplied"
+      operationId: "deleteLot"
+      tags: 
+        - lot      
+      summary: "Deletes a Lot by ID"
+      parameters: 
+        - 
+          name: "lotId"
+          in: "path"
+          description: "ID of lot to delete"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses: 
+        "204":
+          description: "lot deleted"
+        default: 
+          description: "unexpected error"
+          schema: 
+            $ref: "#/definitions/ErrorModel"
+            
+            
+            
+            
+  /parkings: 
+    post: 
+      description: "Start the Parking of a Vehicle"
+      summary: "Start the Parking of a Vehicle"
+      operationId: "addParking"
+      tags: 
+        - parking
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "body"
+          in: "body"
+          description: "New Parking of a Vehicle"
+          required: true
+          schema:
+            $ref: "#/definitions/Parking"
+      responses: 
+        "200":
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/Parking"
+        "400": 
+          description: "Invalid parking"
+          
+  /parkings/{parkingId}: 
+    get: 
+      description: "Returns a Parking by ID"
+      summary: "Returns a Parking by ID"
+      operationId: "getParkingByID"
+      tags: 
+        - parking
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "parkingId"
+          in: "path"
+          description: "ID of the Parking to fetch"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses: 
+        "200":
+          description: "successful response"
+          schema: 
+            $ref: "#/definitions/Parking"
+        default: 
+          description: "unexpected error"
+          schema: 
+            $ref: "#/definitions/ErrorModel"
+    delete: 
+      description: "Delete a parking by ID"
+      summary: "End the Parking of a Vehicle"
+      operationId: "deleteParking"
+      tags: 
+        - parking
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "parkingId"
+          in: "path"
+          description: "ID of the parking to be deleted"
+          required: true
+          type: "integer"
+          format: "int64"
+          minimum: 1.0
+      responses: 
+        "400":
+          description: "Invalid ID supplied"
+        "404": 
+          description: "Parking not found"   
+          
+  /parkings/{parkingId}/bill: 
+    get: 
+      description: "Computes and returns the Bill for a Parking"
+      summary: "Computes and returns the Bill for a Parking"
+      operationId: "getParkingBill"
+      tags: 
+        - parking
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "parkingId"
+          in: "path"
+          description: "ID of the Parking"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses: 
+        "200":
+          description: "successful response"
+          schema: 
+            $ref: "#/definitions/Bill"
+        default: 
+          description: "unexpected error"
+          schema: 
+            $ref: "#/definitions/ErrorModel"        
+          
+  /pricingPolicies/linearPricingPolicy: 
+    post: 
+      description: "Creates a PricingPolicy of type `Linear`"
+      summary: "Creates a PricingPolicy of type `Linear`"
+      operationId: "addLinearPricingPolicy"
+      tags: 
+        - pricingPolicy
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "body"
+          in: "body"
+          description: "New pricing policy"
+          required: true
+          schema:
+            $ref: "#/definitions/LinearPricingPolicy"
+      responses: 
+        "200":
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/LinearPricingPolicy"
+        "400": 
+          description: "Invalid Pricing Policy"
+          
+  /pricingPolicies/fixedThenlinearPricingPolicy: 
+    post: 
+      description: "Creates a PricingPolicy of type `FixedThenLinear`"
+      summary: "Creates a PricingPolicy of type `FixedThenLinear`"
+      operationId: "addFixedThenLinearPricingPolicy"
+      tags: 
+        - pricingPolicy
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "body"
+          in: "body"
+          description: "New pricing policy"
+          required: true
+          schema:
+            $ref: "#/definitions/FixedThenLinearPricingPolicy"
+      responses: 
+        "200":
+          description: "successful operation"
+          schema: 
+            $ref: "#/definitions/FixedThenLinearPricingPolicy"
+        "400": 
+          description: "Invalid Pricing Policy"  
+          
+  /pricingPolicies/{pricingPolicyId}: 
+    get: 
+      description: "Returns a Pricing Policy by ID"
+      summary: "Returns a Pricing Policy by ID"
+      operationId: "getPricingPolicyById"
+      tags: 
+        - pricingPolicy
+      produces: 
+        - "application/json"
+        - "application/xml"
+      parameters: 
+        - 
+          name: "pricingPolicyId"
+          in: "path"
+          description: "ID of the Pricing Policy to fetch"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses: 
+        "200":
+          description: "successful response"
+          schema: 
+            $ref: "#/definitions/PricingPolicy"
+        default: 
+          description: "unexpected error"
+          schema: 
+            $ref: "#/definitions/ErrorModel"
+            
+definitions: 
+  Lot: 
+    type: "object"
+    properties: 
+      lotId: 
+        type: "integer"
+        format: "int64"
+      lotStatus: 
+        type: "string"
+        enum:
+          - available
+          - busy
+      carType: 
+        type: "string"
+        enum:
+          - gasoline
+          - electric20kw
+          - electric50kw
+      pricingPolicyId:
+        type: "integer"
+        format: "int64"
+      coordinates: 
+        type: object
+        properties:
+          floor:
+            type: string
+          sector:
+            type: string
+          placeNumber:
+            type: string
+      
+  Car: 
+    type: "object"
+    properties: 
+      numberplate:
+        type: "string"
+      carType:
+        type: "string"
+        enum:
+          - gasoline
+          - electric20kw
+          - electric50kw
+      
+  Parking: 
+    type: "object"
+    properties: 
+      parkingId: 
+        type: "integer"
+        format: "int64"
+      lotId: 
+        type: "integer"
+        format: "int64"
+      car: 
+        $ref: "#/definitions/Car"
+      startDate:
+        type: "integer"
+        format: "int64"
+        description: "Start time of the parking in milliseconds"
+      endDate:
+        type: "integer"
+        format: "int64"
+        description: "End time of the parking in milliseconds"
+        
+  Bill: 
+    type: "object"
+    properties: 
+      timeSpentInHours: 
+        type: "integer"
+        format: "int64"
+      monetaryAmount:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            currency: 
+              type: "string"
+            amount: 
+              type: "number"
+              format: "currency"
+
+        
+  PricingPolicy: 
+    type: "object"
+    required:
+      - pricingPolicyType
+    discriminator: pricingPolicyType
+    properties:
+      pricingPolicyId: 
+        type: "integer"
+        format: "int64"
+      pricingPolicyType: 
+        type: "string"
+
+  LinearPricingPolicy:
+    allOf:     # Combines the PricingPolicy and the inline model
+      - $ref: '#/definitions/PricingPolicy'
+      - type: object
+        required:
+          - hourPrice
+        properties:
+          hourPrice:
+            type: number
+            format: currency
+      
+  FixedThenLinearPricingPolicy:
+    allOf:     # Combines the PricingPolicy and the inline model
+      - $ref: '#/definitions/PricingPolicy'
+      - type: object
+        required:
+          - hourPrice
+          - fixedAmount
+        properties:
+          hourPrice:
+            type: number
+            format: currency
+          fixedAmount:
+            type: number
+            format: currency
+      
+  ErrorModel: 
+    type: "object"
+    required: 
+      - "code"
+      - "message"
+    properties: 
+      code: 
+        type: "integer"
+        format: "int32"
+      message: 
+        type: "string"
+        
+ 
+  
+
+
