@@ -1,4 +1,4 @@
-# swagger-java-client
+# Toll Parking API Client
 
 Toll Parking API
 - API version: 1.0.0
@@ -84,6 +84,9 @@ To deploy it to a remote Maven repository instead, configure the settings of the
 ```shell
 mvn clean deploy
 ```
+
+PS: if you experience any problem with the *maven-enforcer-plugin* (that forces the Maven version to 2.2.0), you can comment it out from the `pom.xml`.
+
 
 Refer to the [OSSRH Guide](http://central.sonatype.org/pages/ossrh-guide.html) for more information.
 
