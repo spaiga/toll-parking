@@ -8,8 +8,8 @@ Toll Parking API
 
 The document aims at describing the Toll Parking API create by `Fabio SPIGA`.  
 
-Through Toll Parking API, an end user is able to search for the most convenient parking lot for its own vehicle, drive to it and park. 
-At the moment of leaving, the API allows to compute the amount to pay and bill the end user.  
+Through Toll Parking API, an end user can search for the most convenient parking lot for its own car, drive to it and park. 
+At the moment of leaving, the API allows to compute the amount to pay and provide a bill to the user.
 
 ## CRUD operations 
 
@@ -31,7 +31,7 @@ It might be provided with power supply for electric cars or not, as indicated by
 A specific `PricingPolicy` is configured for each Lot, among the available policies provided by the API.   
 
 ### PricingPolicy 
-A `PricingPolicy` specifies the logic to compute a `Bill` and the end of the parking. 
+A `PricingPolicy` specifies the logic to compute a `Bill` at the end of the parking. 
  
 It is a generic type, that allows multiple implementations. 
 
@@ -57,7 +57,7 @@ The `Car` resource represents any potential user of the Toll Parking.
 
 will return all the parking Lots with their details. 
 
-``` GET /lots?status=availablefacility=powerSupply20kw ``` 
+``` GET /lots?status=available&carType=powerSupply20kw ``` 
 
 will return all the parking lots with status 'available' and providing for a 20kW power supply. 
 
@@ -163,8 +163,8 @@ Class | Method | HTTP request | Description
 *LotApi* | [**deleteLot**](docs/LotApi.md#deleteLot) | **DELETE** /lots/{lotId} | Deletes a Lot by ID
 *LotApi* | [**getLotByID**](docs/LotApi.md#getLotByID) | **GET** /lots/{lotId} | Returns a Lot by ID
 *LotApi* | [**updateLotStatus**](docs/LotApi.md#updateLotStatus) | **PUT** /lots | Update the Status of a Lot
-*ParkingApi* | [**addParking**](docs/ParkingApi.md#addParking) | **POST** /parkings | Start the Parking of a Vehicle
-*ParkingApi* | [**deleteParking**](docs/ParkingApi.md#deleteParking) | **DELETE** /parkings/{parkingId} | End the Parking of a Vehicle
+*ParkingApi* | [**addParking**](docs/ParkingApi.md#addParking) | **POST** /parkings | Start the Parking of a Car
+*ParkingApi* | [**deleteParking**](docs/ParkingApi.md#deleteParking) | **DELETE** /parkings/{parkingId} | End the Parking of a Car
 *ParkingApi* | [**getLots**](docs/ParkingApi.md#getLots) | **GET** /lots | Returns a list of Lots, optionally filtered by Status and CarType
 *ParkingApi* | [**getParkingBill**](docs/ParkingApi.md#getParkingBill) | **GET** /parkings/{parkingId}/bill | Computes and returns the Bill for a Parking
 *ParkingApi* | [**getParkingByID**](docs/ParkingApi.md#getParkingByID) | **GET** /parkings/{parkingId} | Returns a Parking by ID

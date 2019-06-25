@@ -11,7 +11,7 @@ info:
     The document aims at describing the Toll Parking API create by `Fabio SPIGA`.
 
 
-    Through Toll Parking API, an end user is able to search for the most convenient parking lot for its own vehicle, drive to it and park. At the moment of leaving, the API allows to compute the amount to pay and bill the end user.
+    Through Toll Parking API, an end user can search for the most convenient parking lot for its own car, drive to it and park. At the moment of leaving, the API allows to compute the amount to pay and provide a bill to the user.
 
 
     ## CRUD operations
@@ -36,7 +36,7 @@ info:
 
     ### PricingPolicy
 
-    A `PricingPolicy` specifies the logic to compute a `Bill` and the end of the parking. 
+    A `PricingPolicy` specifies the logic to compute a `Bill` at the end of the parking. 
     
     It is a generic type, that allows multiple implementations.
     
@@ -44,12 +44,12 @@ info:
       * `LinearPricingPolicy`, billing the customers for each hour spent in the parking;
       * `FixedThenLinearPricingPolicy`, billing a fixed amount plus each hour spent in the parking.
       
-    In the future, more policies will be available and can dinamically attached to any Lot.
+    In the future, more policies will be available and can dinamically be attached to any Lot.
     
 
     ### Bill
 
-    The `Bill` resource represents the ticket information provided a the end of the parking, indicating the time spent and the amount to pay.
+    The `Bill` resource represents the ticket information provided at the end of the parking, indicating the time spent and the amount to pay.
 
     ### Car
 
@@ -70,7 +70,7 @@ info:
 
     ```
 
-    GET /lots?status=availablefacility=powerSupply20kw
+    GET /lots?status=available&carType=powerSupply20kw
 
     ```
 
@@ -253,8 +253,8 @@ paths:
             
   /parkings: 
     post: 
-      description: "Start the Parking of a Vehicle"
-      summary: "Start the Parking of a Vehicle"
+      description: "Start the Parking of a Car"
+      summary: "Start the Parking of a Car"
       operationId: "addParking"
       tags: 
         - parking
@@ -265,7 +265,7 @@ paths:
         - 
           name: "body"
           in: "body"
-          description: "New Parking of a Vehicle"
+          description: "New Parking of a Car"
           required: true
           schema:
             $ref: "#/definitions/Parking"
@@ -306,7 +306,7 @@ paths:
             $ref: "#/definitions/ErrorModel"
     delete: 
       description: "Delete a parking by ID"
-      summary: "End the Parking of a Vehicle"
+      summary: "End the Parking of a Car"
       operationId: "deleteParking"
       tags: 
         - parking
@@ -317,7 +317,7 @@ paths:
         - 
           name: "parkingId"
           in: "path"
-          description: "ID of the parking to be deleted"
+          description: "ID of the Parking to be deleted"
           required: true
           type: "integer"
           format: "int64"
