@@ -31,6 +31,7 @@ public class Bootstrap extends HttpServlet {
 
     new SwaggerContextService().withServletConfig(config).updateSwagger(swagger);
     
+    // Initializing the in-memory database with a prefilled set of Lots and Pricing Policies
     MockTollParkingInitializer.getInstance().initParkingConfiguration();
   }
 }

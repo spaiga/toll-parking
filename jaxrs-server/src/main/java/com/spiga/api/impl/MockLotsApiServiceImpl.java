@@ -12,6 +12,11 @@ import io.swagger.api.LotsApiService;
 import io.swagger.api.NotFoundException;
 import io.swagger.model.Lot;
 
+/**
+ * Implementations of the API associated to the Lot resource.
+ * @author fspiga
+ *
+ */
 public class MockLotsApiServiceImpl extends LotsApiService {
 
     @Override

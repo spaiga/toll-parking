@@ -1,17 +1,24 @@
 package com.spiga.persistence;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
-import io.swagger.model.Lot.CarTypeEnum;
 import io.swagger.model.FixedThenLinearPricingPolicy;
 import io.swagger.model.LinearPricingPolicy;
 import io.swagger.model.Lot;
+import io.swagger.model.Lot.CarTypeEnum;
 import io.swagger.model.Lot.LotStatusEnum;
 import io.swagger.model.LotCoordinates;
 import io.swagger.model.PricingPolicy;
 
+/**
+ * As example, it prefills the in-memory data with 12 lots of any type
+ * and 2 different types of pricing policies.
+ * 
+ * At term, the configuration will be retrieved from a database.
+ * 
+ * @author fspiga
+ *
+ */
 public class MockTollParkingInitializer {
 	
 	private static MockTollParkingInitializer instance;

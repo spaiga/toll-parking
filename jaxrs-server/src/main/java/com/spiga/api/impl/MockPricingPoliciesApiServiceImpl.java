@@ -10,7 +10,12 @@ import io.swagger.api.PricingPoliciesApiService;
 import io.swagger.model.FixedThenLinearPricingPolicy;
 import io.swagger.model.LinearPricingPolicy;
 import io.swagger.model.PricingPolicy;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2019-06-22T10:19:47.246Z")
+
+/**
+ * Implementations of the API associated to the PricingPolicy resource.
+ * @author fspiga
+ *
+ */
 public class MockPricingPoliciesApiServiceImpl extends PricingPoliciesApiService {
     @Override
     public Response addFixedThenLinearPricingPolicy(FixedThenLinearPricingPolicy body, SecurityContext securityContext) throws NotFoundException {

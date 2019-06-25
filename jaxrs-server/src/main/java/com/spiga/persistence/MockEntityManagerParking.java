@@ -1,11 +1,17 @@
 package com.spiga.persistence;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.swagger.model.Parking;
 
+/**
+ * Fake entity manager to handle the Parking persistence (in memory, as an example).
+ * At term, a database access will replace this.
+ * 
+ * @author fspiga
+ *
+ */
 public class MockEntityManagerParking {
 	
 	static Long lastParkingID = 0L;

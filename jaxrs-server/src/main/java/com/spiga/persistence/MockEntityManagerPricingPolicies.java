@@ -1,12 +1,17 @@
 package com.spiga.persistence;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.swagger.model.LinearPricingPolicy;
 import io.swagger.model.PricingPolicy;
 
+/**
+ * Fake entity manager to handle the PricingPolicy persistence (in memory, as an example).
+ * At term, a database access will replace this.
+ * 
+ * @author fspiga
+ *
+ */
 public class MockEntityManagerPricingPolicies {
 	
 	static Long lastPricingPolicyID = 0L;

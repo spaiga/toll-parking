@@ -1,16 +1,8 @@
 package com.spiga.api.impl;
 
-import io.swagger.api.*;
-import io.swagger.model.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import io.swagger.api.NotFoundException;
-
-import java.io.InputStream;
-import java.math.BigDecimal;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import javax.validation.constraints.Min;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 import com.spiga.api.factories.PricingPolicyCalculatorServiceFactory;
 import com.spiga.api.pricing.PricingPolicyCalculatorService;
@@ -18,10 +10,19 @@ import com.spiga.persistence.MockEntityManagerLot;
 import com.spiga.persistence.MockEntityManagerParking;
 import com.spiga.persistence.MockEntityManagerPricingPolicies;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.validation.constraints.*;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2019-06-22T09:26:22.482Z")
+import io.swagger.api.ApiResponseMessage;
+import io.swagger.api.NotFoundException;
+import io.swagger.api.ParkingsApiService;
+import io.swagger.model.Bill;
+import io.swagger.model.Lot;
+import io.swagger.model.Parking;
+import io.swagger.model.PricingPolicy;
+
+/**
+ * Implementations of the API associated to the Parking resource.
+ * @author fspiga
+ *
+ */
 public class MockParkingsApiServiceImpl extends ParkingsApiService {
     @Override
     public Response addParking(Parking body, SecurityContext securityContext) throws NotFoundException {

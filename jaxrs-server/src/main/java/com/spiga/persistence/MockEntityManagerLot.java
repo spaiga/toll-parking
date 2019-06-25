@@ -7,6 +7,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import io.swagger.model.Lot;
 
+/**
+ * Fake entity manager to handle the Lot persistence (in memory, as an example).
+ * At term, a database access will replace this.
+ * 
+ * @author fspiga
+ *
+ */
 public class MockEntityManagerLot {
 	
 	static Long lastLotID = 0L;
